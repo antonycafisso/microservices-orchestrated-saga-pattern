@@ -1,6 +1,5 @@
 package br.com.microservices.orchestrated.orchestratorservice.config.kafka;
 
-import br.com.microservices.orchestrated.orchestratorservice.core.enums.ETopics;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -69,7 +68,7 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    private NewTopic buildTopic(String name){
+    private NewTopic buildTopic(String name) {
         return TopicBuilder
                 .name(name)
                 .replicas(REPLICA_COUNT)
@@ -126,7 +125,6 @@ public class KafkaConfig {
     public NewTopic paymentFailTopic() {
         return buildTopic(PAYMENT_FAIL.getTopic());
     }
-
 
     @Bean
     public NewTopic notifyEndingTopic() {
