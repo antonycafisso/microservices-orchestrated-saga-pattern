@@ -1,4 +1,4 @@
-package br.com.microservices.orchestrated.productvalidationservice.config.kafka.exception;
+package br.com.microservices.orchestrated.productvalidationservice.core.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
