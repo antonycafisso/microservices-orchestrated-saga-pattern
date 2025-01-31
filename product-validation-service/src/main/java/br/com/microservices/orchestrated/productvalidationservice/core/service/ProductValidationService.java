@@ -37,6 +37,7 @@ public class ProductValidationService {
             handleSuccess(event);
         }catch (Exception e) {
             log.error("Error trying to validate products: ", e);
+            handleFailCurrentNotExecuted(event, e.getMessage());
         }
         kafkaProducer.sendEvent(jsonUtil.toJson(event));
     }
@@ -97,5 +98,29 @@ public class ProductValidationService {
                 .createdAt(LocalDateTime.now())
                 .build();
         event.addToHistory(history);
+    }
+
+    private void handleFailCurrentNotExecuted(Event event, String message) {
+        event.setStatus(ESagaStatus.ROLLBACK_PENDING);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Fail to validate products: ".concat(message));
+    }
+
+    public void rollbackEvent(Event event) {
+        changeValidationToFail(event);
+        event.setStatus(ESagaStatus.FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executed on product validation");
+        kafkaProducer.sendEvent(jsonUtil.toJson(event));
+    }
+
+    private void changeValidationToFail(Event event) {
+        validationRepository
+                .findByOrderIdAndTransactionId(event.getPayload().getId(), event.getTransactionId())
+                .ifPresentOrElse(validation -> {
+                    validation.setSuccess(false);
+                    validationRepository.save(validation);
+                    },
+                    ()-> createValidation(event, false));
     }
 }
