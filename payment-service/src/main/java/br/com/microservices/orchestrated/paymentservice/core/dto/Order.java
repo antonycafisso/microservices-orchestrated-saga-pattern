@@ -16,7 +16,7 @@ import java.util.List;
 public class Order {
 
     private String id;
-    private List<Order> products;
+    private List<OrderProducts> products;
     private LocalDateTime createdAt;
     private String transactionId;
     private Double totalAmount;
