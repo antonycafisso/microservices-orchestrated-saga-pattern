@@ -39,8 +39,15 @@ public class PaymentService {
             handleSuccess(event);
         } catch (Exception e) {
             log.error("Error trying to make payment: ", e);
+            handleFailCurrentNotExecuted(event, e.getMessage());
         }
         kafkaProducer.sendEvent(jsonUtil.toJson(event));
+    }
+
+    private void handleFailCurrentNotExecuted(Event event, String message) {
+        event.setStatus(ESagaStatus.ROLLBACK_PENDING);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Fail to realize payment: ".concat(message));
     }
 
     private void checkCurrentValidation(Event event) {
@@ -118,5 +125,20 @@ public class PaymentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         event.addToHistory(history);
+    }
+
+    public void realizeRefund(Event event) {
+        changePaymentStatusToRefund(event);
+        event.setStatus(ESagaStatus.FAIL);
+        event.setSource(CURRENT_SOURCE);
+        addHistory(event, "Rollback executed for payment");
+        kafkaProducer.sendEvent(jsonUtil.toJson(event));
+    }
+
+    private void changePaymentStatusToRefund(Event event) {
+        var payment = findByOrderIdAndTransactionId(event);
+        payment.setStatus(EPaymentStatus.REFUND);
+        setEventAmountItems(event, payment);
+        save(payment);
     }
 }
