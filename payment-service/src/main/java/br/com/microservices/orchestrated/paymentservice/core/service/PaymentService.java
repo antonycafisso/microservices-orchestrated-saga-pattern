@@ -134,7 +134,7 @@ public class PaymentService {
             changePaymentStatusToRefund(event);
             addHistory(event, "Rollback executed for payment");
         } catch (Exception e) {
-            addHistory(event, "Payment not found by orderId and transactionId");
+            addHistory(event, "Rollback not executed for payment".concat(e.getMessage()));
         }
         kafkaProducer.sendEvent(jsonUtil.toJson(event));
     }
