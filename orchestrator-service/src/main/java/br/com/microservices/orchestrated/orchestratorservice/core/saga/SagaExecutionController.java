@@ -2,7 +2,7 @@ package br.com.microservices.orchestrated.orchestratorservice.core.saga;
 
 import br.com.microservices.orchestrated.orchestratorservice.core.dto.Event;
 import br.com.microservices.orchestrated.orchestratorservice.core.enums.ETopics;
-import br.com.microservices.orchestrated.orderservice.config.exception.ValidationException;
+import br.com.microservices.orchestrated.orchestratorservice.config.exception.ValidationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

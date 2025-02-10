@@ -7,7 +7,7 @@ import br.com.microservices.orchestrated.orchestratorservice.core.enums.ESagaSta
 import br.com.microservices.orchestrated.orchestratorservice.core.enums.ETopics;
 import br.com.microservices.orchestrated.orchestratorservice.core.producer.SagaOrchestratorProducer;
 import br.com.microservices.orchestrated.orchestratorservice.core.saga.SagaExecutionController;
-import br.com.microservices.orchestrated.orderservice.core.utils.JsonUtil;
+import br.com.microservices.orchestrated.orchestratorservice.core.utils.JsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
