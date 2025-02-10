@@ -13,7 +13,7 @@ public class SagaOrchestratorProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    private void sendEvent(String payload, String topic) {
+    public void sendEvent(String payload, String topic) {
         try{
             log.info("Sending event to topic {} with data {}", topic, payload);
             kafkaTemplate.send(topic, payload);
