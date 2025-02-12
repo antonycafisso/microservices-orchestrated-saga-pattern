@@ -40,6 +40,7 @@ public class InventoryService {
             log.error("Error trying to update inventory: ", e);
             handleFailCurrentNotExecuted(event, e.getMessage());
         }
+        kafkaProducer.sendEvent(jsonUtil.toJson(event));
     }
 
     private void checkCurrentValidation(Event event) {
